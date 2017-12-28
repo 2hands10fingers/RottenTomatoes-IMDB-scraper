@@ -30,5 +30,5 @@ with open('object.json', 'r+') as file:
 
 		print("\nTitle: {}\n".format(title))
 		print("Rating: {}\nTomato Score: {}%\nPopcorn Score {}%".format(rating, tomato_score, 
-																				popcorn_score))
+										popcorn_score))
 		print('\n-------------------')
