@@ -8,8 +8,9 @@ pp = pprint.PrettyPrinter(indent=4)
 
 source = get('http://www.imdb.com/movies-in-theaters/?ref_=nv_mv_inth_1').text
 soup = bs(source, 'lxml')
+movies = soup.find_all('table', { 'class': 'nm-title-overview-widget-layout'})
 
-metascore = soup.find_all("span", { "class" : "metascore" })
+metascore = soup.find("span", { "class" : "metascore" })
 genre = soup.find_all("p", { "class" : "cert-runtime-genre" })
 title = soup.find_all('td', { "class" : "overview-top" })
 
@@ -37,18 +38,14 @@ def strip_returner(x):
 
 meta_score = [strip_returner(i) for i in metascore]
 genres = [returner(i) for i in genre]
-
-
-
 myobject = {
-			 "title": title_array,
-			 "metascore": meta_score,
-			 "genre": genre_array
-		   }
-
-# print(myobject)
+		"title": title_array,
+		"metascore": meta_score,
+		"genre": genre_array
+	    }
 
 mylist = []
+
 for key, items in myobject.items():
    for i, item in enumerate(items):
        if len(mylist) == i:
@@ -59,25 +56,12 @@ for key, items in myobject.items():
 with open('imdbobject.json', 'w') as file:
 	dump(mylist, file, indent=4, sort_keys=True)
 
+with open('imdbobject.json', 'r+') as imdbfile:
+	data = load(imdbfile)
 
-with open('imdbobject.json', 'r+') as file:
-	data = load(file)
+	for i in data:
+		genre = i['genre']
+		meta = i['metascore']
+		title = i['title']
 
-	with open('imdbobject.json', 'r+') as rottentomatoes:
-
-		im_data = load(rottentomatoes)
-		for x,y in zip(rottentomatoes,data):
-			print(x,y)
-
-
-# motherobject = []
-
-# for key, value in myobject.items():
-# 	print(key,value.index(i))
-
-
-
-# pp.pprint(motherobject)
-
-
-
+		print("\n Title: {} \n Metascore: {} \n Genre: {}".format(title, meta, genre))
