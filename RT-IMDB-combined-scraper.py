@@ -17,9 +17,10 @@ for movie in imdb_movies:
 	genre = movie.find("p", { "class" : "cert-runtime-genre" }).span.text
 	title = movie.find('td', { "class" : "overview-top" }).h4.a.text[:-7].lstrip()
 	
-	all_movies[title] = { 'metascore': metascore, 
-						  'genre': genre
-						}
+	all_movies[title] = { 
+			      'metascore': metascore, 
+			      'genre': genre
+			    }
 
 rt_source = get('''https://www.rottentomatoes.com/browse/in-theaters?minTomato=0&
 				maxTomato=100&minPopcorn=0&maxPopcorn=100&
@@ -42,16 +43,17 @@ with open('object.json', 'r+') as file:
 		popcorn_score = i["popcornScore"]
 		tomato_score = i["tomatoScore"]
 
-		all_movies_two[title] = {'rating': rating, 
-								 'popcornscore': popcorn_score, 
-								 'tomatoscore': tomato_score }
+		all_movies_two[title] = {
+					 'rating': rating, 
+					 'popcornscore': popcorn_score, 
+					 'tomatoscore': tomato_score 
+					}
 
 for i in all_movies_two:
 	try:
 		all_movies.update(all_movies_two) or all_movies
 	except RuntimeError:
 		continue
-
 
 with open('final.json', 'w') as file:
 	x = ([all_movies])
